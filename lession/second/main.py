@@ -1,7 +1,7 @@
 
 from datetime import datetime
 from enum import Enum
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, status
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from fastapi.encoders import jsonable_encoder
@@ -11,6 +11,13 @@ from fastapi.responses import JSONResponse
 app = FastAPI(
     title="TriPic"
 )
+
+@app.exception_handler(ValidationError)
+async def validation_exeption_handler(request: Request, exc: ValidationError):
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content=jsonable_encoder({"detail": exc.errors()}),
+    )
 
 fake_users = [
     {"id": 1, "role": "admin", "name": "Bob"},
@@ -44,9 +51,9 @@ def get_user(user_id: int):
     return [user for user in fake_users if user.get("id") == user_id]
 
 fake_avia = [
-    {"id": 1, "user_id": 1, "froms": "Moscow", "to": "Milan", "price": 7854, "status": True},
-    {"id": 2, "user_id": 1, "froms": "Moscow", "to": "Berlin", "price": 13567, "status": False},
-    {"id": 3, "user_id": 1, "froms": "Moscow", "to": "Barcelona", "price": 11503, "status": True},
+    {"id": 1, "user_id": 1, "froms": "Moscow", "to": "Milan", "price": 7845.04, "status": True},
+    {"id": 2, "user_id": 1, "froms": "Moscow", "to": "Berlin", "price": 13536.07, "status": False},
+    {"id": 3, "user_id": 1, "froms": "Moscow", "to": "Barcelona", "price": 15135.03, "status": True},
 ]
 
 class Avia(BaseModel):
