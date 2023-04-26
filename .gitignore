@@ -1,4 +1,4 @@
-echo ".env" >> .gitignore
+echo "/lession/third/.env" >> .gitignore
 .DS_Store
 /lession/third/.env
 /lession/third/__pycache__
