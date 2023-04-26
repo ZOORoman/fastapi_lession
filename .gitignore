@@ -1,5 +1,3 @@
 echo "/lession/third/.env" >> .gitignore
 .DS_Store
 /lession/third/.env
-/lession/third/__pycache__
-/lession/third/auth/__pycache__
