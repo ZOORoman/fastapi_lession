@@ -1,5 +1,4 @@
 # pydantic models
-
 from typing import Optional
 
 from fastapi_users import schemas

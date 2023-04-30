@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/romac/Documents/project/fastapi/lession/third/venv"
+VIRTUAL_ENV="/Users/romac/Documents/project/fastapi/lession/fourth/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

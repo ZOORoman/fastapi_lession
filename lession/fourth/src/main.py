@@ -1,48 +1,23 @@
-
-from datetime import datetime
-from enum import Enum
-from typing import List, Optional, Union
-from fastapi_users import FastAPIUsers
-from pydantic import BaseModel, Field
-
-from fastapi import FastAPI, Request, status, Depends
-from fastapi.encoders import jsonable_encoder
-from fastapi.exceptions import ValidationError
-from fastapi.responses import JSONResponse
-
-from auth.auth import auth_backend
-from auth.database import User
-from auth.manager import get_user_manager
+from fastapi import FastAPI
+from auth.base_config import auth_backend, fastapi_users
 from auth.schemas import UserRead, UserCreate
+
+from operations.router import router as router_operation
 
 app = FastAPI(
     title="TriPic"
 )
 
-fastapi_users = FastAPIUsers[User, int](
-    get_user_manager,
-    [auth_backend],
-)
-
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
-    prefix="/auth/jwt",
-    tags=["auth"],
+    prefix="/auth",
+    tags=["Auth"],
 )
 
 app.include_router(
     fastapi_users.get_register_router(UserRead, UserCreate),
     prefix="/auth",
-    tags=["auth"],
+    tags=["Auth"],
 )
 
-current_user = fastapi_users.current_user()
-
-@app.get("/protected-route")
-def protected_route(user: User = Depends(current_user)):
-    return f"Hello, {user.username}"
-
-
-@app.get("/unprotected-route")
-def unprotected_route():
-    return f"Hello, anonym"
+app.include_router(router_operation)
