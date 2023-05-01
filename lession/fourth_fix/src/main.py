@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+from auth.base_config import User, current_user
 
 from auth.base_config import auth_backend, fastapi_users
 from auth.schemas import UserRead, UserCreate
@@ -22,3 +23,11 @@ app.include_router(
 )
 
 app.include_router(router_operation)
+
+@app.get("/protected-route")
+def protected_route(user: User = Depends(current_user)):
+    return f"Привет, {user.username} !"
+
+@app.get("/unprotected-route")
+def protected_route():
+    return f"Аноним! Вы не зарегистрированы"
