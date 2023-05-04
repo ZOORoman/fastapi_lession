@@ -17,7 +17,7 @@ router = APIRouter(
 )
 
 @router.get("/long_operation")
-@cache(expire=3)
+@cache(expire=30)
 def get_long_op():
     time.sleep(2)
     return "Идут вычисления..."
