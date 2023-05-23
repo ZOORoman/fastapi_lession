@@ -2,7 +2,7 @@ import time
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select, insert
+from sqlalchemy import select, insert, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_cache.decorator import cache
 
@@ -45,7 +45,10 @@ def get_long_op():
 # }
 
 @router.get("")
-async def get_specific_operations(operation_type: str, session: AsyncSession = Depends(get_async_session)):
+async def get_specific_operations(
+    operation_type: str, 
+    session: AsyncSession = Depends(get_async_session)
+):
     try:
         query = select(operation).where(operation.c.type == operation_type)
         result = await session.execute(query)
@@ -69,3 +72,16 @@ async def add_specific_operations(new_operation: OperationCreate, session: Async
     await session.execute(stmt)
     await session.commit()
     return {"status": "Данные добавлены"}
+
+@router.delete("")
+async def del_specific_operations(
+    operation_id: int, 
+    session: AsyncSession = Depends(get_async_session)
+    ):
+    stmt = (
+        delete(operation).
+        where(operation.c.id == operation_id)
+    )
+    await session.execute(stmt)
+    await session.commit()
+    return {"status": "Данные удалены"}

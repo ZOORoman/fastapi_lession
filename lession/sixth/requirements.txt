@@ -9,3 +9,5 @@ fastapi-cache2[redis]
 email-validator
 celery
 flower
+pytest
+pytest-asyncio
